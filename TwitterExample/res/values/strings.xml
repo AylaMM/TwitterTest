@@ -1,0 +1,9 @@
+<resources>
+
+    <string name="app_name">TwitterExample</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_twitter">TwitterActivity</string>
+    <string name="fetching">Fetching tweets...</string>
+
+</resources>

@@ -1,5 +1,7 @@
 package com.example.twitterexample;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -16,10 +18,10 @@ import android.widget.TextView;
 public class TwitterTask extends AsyncTask<TextView, Void, String> {
 
 	private TextView textView;
-	private String text = "";
 
 	@Override
 	protected String doInBackground(TextView... params) {
+		String text = "";
 		//Kids remember, always be safe!
 		if(params.length > 0) {
 			this.textView = params[0];
@@ -29,13 +31,23 @@ public class TwitterTask extends AsyncTask<TextView, Void, String> {
 		try {
 			List<twitter4j.Status> tweets = twitter.getUserTimeline("malmohogskola");
 			for (twitter4j.Status status : tweets) {
-				text += status.getUser().getName() + ": " + status.getText() + "\n\n";
+				text += status.getUser().getName() + " " + processDate(status) + ": " + status.getText() + "\n\n";				
 			}
 		} catch (TwitterException e) {
 			text = "Unable to connect to Twitter";
 			e.printStackTrace();
 		}
 		return text;
+	}
+	
+	/**
+	 * Returns the date and time the input tweet was created
+	 * @param status
+	 * @return
+	 */
+	private String processDate(twitter4j.Status status) {
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		return  df.format(status.getCreatedAt());
 	}
 
 	/**
@@ -62,7 +74,7 @@ public class TwitterTask extends AsyncTask<TextView, Void, String> {
 		//This method is executed on the UI thread
 		//Kids remember, always be safe!
 		if(textView != null) {
-			textView.setText(text);
+			textView.setText(result);
 		}
 	}
 }
